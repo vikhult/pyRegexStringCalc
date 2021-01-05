@@ -13,16 +13,14 @@ class ExprReader():
         else:
             self.expr = None
         
-        # self.operators = ['+','-',
-        #              '*','/',
-        #              '**']
+        self.operators = ['**','*','/','-','+']
         self.decimalSgn = '.'
         # self.separator = ['(',')']
         self.expr = ''
         self.partitions = []
         self.result = 0.0
         
-        self.reOper = re.compile('([\+,\-,\*,\**]{1,1})')
+        self.reOper = re.compile('([\+|\-|\*|\/|\*\*]{1,1})')
         # seper = re.compile('(\()\d+[\+|\-|\*|\\|\*\*]\d+(\))')
         self.reSeper = re.compile('(\(+)|(\)+)')
                 
@@ -37,7 +35,6 @@ class ExprReader():
         
     def report(self):
         print(self.result)
-    
         
     def calculateExpr(self, expression=None):
         if expression != None:
@@ -45,25 +42,33 @@ class ExprReader():
         if self.expr != None:
             self.partitions = self.reOper.split(self.expr)
             partitionsCp = self.partitions
-            while '*' in partitionsCp:
-                operIndx = partitionsCp.index('*')
-                a = partitionsCp[operIndx-1]
-                b = partitionsCp[operIndx+1]
-                
-                partitionsCp.pop(operIndx-1)
-                partitionsCp.pop(operIndx-1)
-                partitionsCp[operIndx-1] = int(a)*int(b)
-            while '+' in partitionsCp:
-                operIndx = partitionsCp.index('+')
-                a = partitionsCp[operIndx-1]
-                b = partitionsCp[operIndx+1]
-                
-                partitionsCp.pop(operIndx-1)
-                partitionsCp.pop(operIndx-1)
-                partitionsCp[operIndx-1] = int(a)+int(b)
-            
+            for oper in self.operators:
+                while oper in partitionsCp:
+                    operIndx = partitionsCp.index(oper)
+                    a = partitionsCp[operIndx-1]
+                    b = partitionsCp[operIndx+1]
+                    
+                    partitionsCp.pop(operIndx-1)
+                    partitionsCp.pop(operIndx-1)
+                    partitionsCp[operIndx-1] = arithmetics(
+                        int(a),oper,int(b))
+
             for number in partitionsCp:
                 self.result += int(number)
             self.report()
-                
+ 
+def arithmetics(a,operator,b):
+    if operator == '+':
+        return a+b
+    elif operator == '-':
+        return a-b
+    elif operator == '*':
+        return a*b
+    elif operator == '/':
+        return a/b
+    elif operator == '**':
+        return a**b
+    else:
+        print("Bad operator")
+        return 0
                 

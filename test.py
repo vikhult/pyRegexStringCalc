@@ -8,5 +8,5 @@ from ExprReader import ExprReader
 
 if __name__ == '__main__':
     myReader = ExprReader()
-    myReader.calculateExpr("3*7+7*8*3")
+    myReader.calculateExpr("3*7+7*8*3/3+3")
     ans = myReader.result
